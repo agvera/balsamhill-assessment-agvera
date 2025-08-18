@@ -1,0 +1,22 @@
+{
+  "name": "balsamhill-assessment-agvera",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "chrome": "npx playwright test --project=chromium --trace=on",
+    "all-browsers": "npx playwright test --trace=on",
+    "report": "npx playwright show-report",
+    "compile-report": "rm -rf allure-report && npx allure generate ./allure-results",
+    "open-report": "npx allure open ./allure-report/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.3.0",
+    "allure-playwright": "^3.3.3"
+  }
+}
