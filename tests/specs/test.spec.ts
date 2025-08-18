@@ -10,13 +10,6 @@ test('Add and Remove Product from Cart', async ({ page, common, searchResultPage
     let resultPagePrice: number
     let stickyBarPrice: number
     let productPagePrice: number
-    type productCustomization = {
-        height: string;
-        shape: string;
-        lights: string;
-        setup: string;
-        updatedPrice: number
-    }
     let finalUpdatedPrice: number
 
     // Go to https://www.balsamhill.com/
