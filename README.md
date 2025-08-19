@@ -1,5 +1,5 @@
 # Project Description:
-This is an end-to-end Playwright test suite for validating the e-commerce workflow on Balsam Hills website.
+This is an end-to-end Playwright test suite for validating the e-commerce workflow on Balsam Hill's website.
 The test includes automation of the following:
 - Search for product
 - Product customization
