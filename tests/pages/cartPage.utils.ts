@@ -1,14 +1,16 @@
 import { type Page, type Locator } from '@playwright/test'
+import { Common } from './common.utils'
 
-export class CartPage {
-    readonly page: Page
+export class CartPage extends Common {
+    // readonly page: Page
     readonly itemList: Locator
     readonly deleteIcon: Locator
     readonly totalAmount: Locator
     readonly removedItem: Locator
 
     constructor(page: Page) {
-        this.page = page
+        // this.page = page
+        super(page)
         this.itemList = page.locator('div[class*="cartProductDetailItem_product_details"] > div.flex-wrap')
         this.deleteIcon = page.locator('div[class*="cartProductDetailItem_product_details"] > div.flex-wrap button[class*="cartProductDetailItem_delete-btn"]')
         this.totalAmount = page.locator('span[class*="totalAmountCard_total-value"]')
@@ -28,6 +30,7 @@ export class CartPage {
     }
 
     async removeItemsInThecart() {
-        await this.deleteIcon.click()
+        const deleteIcon =  this.deleteIcon
+        await this.clickElementAndWaitForPageToLoad(deleteIcon)
     }
 }

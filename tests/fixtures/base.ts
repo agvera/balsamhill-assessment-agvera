@@ -13,30 +13,27 @@ type Pages = {
 
 export const test = base.extend<Pages>({
     page: async ({ page }, use) => {
-        // Wait for the page to finish initial network requests
-        await page.waitForLoadState('networkidle')
 
-
-        const cookieBanner = page.getByTestId('cookie-banner')
-        if (await cookieBanner.isVisible()) {
-            const closeBtn = cookieBanner.getByTestId('close-cookie-banner')
+        await page.goto('/')
+        const cookieBanner = page.locator('#cookieBanner')
+        const closeBtn = page.locator('#bannerCloseButton')
+        try {
+            await cookieBanner.waitFor({ state: 'visible', timeout: 2000 })
+            await closeBtn.waitFor({ state: 'visible' })
             await closeBtn.click()
-
-            await expect(cookieBanner).toBeHidden({ timeout: 30000 })
-        }
-
+        } catch { }
+        
         const giftBanner = page.getByText('Our Gift To You! Limited Time')
-        await giftBanner.waitFor({ state: 'visible', timeout: 5000 }).catch(() => { })
-        if (await giftBanner.isVisible()) {
-            const closeBtn = giftBanner.getByRole('button', { name: 'No Thanks' })
-            await closeBtn.click()
-            await expect(giftBanner).toBeHidden({ timeout: 10000 })
-        }
+        await page.addLocatorHandler(giftBanner, async () => {
+            const noThanksBtn = page.getByRole('button', { name: 'No Thanks' })
+            try {
+                await noThanksBtn.waitFor({ state: 'visible' })
+                await noThanksBtn.click()
+                console.log('Gift banner appeared... Clicked No Thanks!')
+            } catch { }
 
-        const spinner = page.getByRole('img', { name: 'Loading' }).first()
-        if (await spinner.isVisible()) {
-            await expect(spinner).toBeHidden({ timeout: 60000 })
-        }
+        })
+
         await use(page)
     },
     common: async ({ page }, use) => {

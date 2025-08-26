@@ -1,7 +1,8 @@
 import { type Page, type Locator, expect } from '@playwright/test'
+import { Common } from './common.utils'
 
-export class SearchResultsPage {
-    readonly page: Page
+export class SearchResultsPage extends Common {
+    // readonly page: Page
     readonly searchResultContainer: Locator
     readonly productDetailContainer: Locator
     readonly productName: Locator
@@ -9,7 +10,8 @@ export class SearchResultsPage {
     readonly searchProductPrice: Locator
 
     constructor(page: Page) {
-        this.page = page
+        super(page)
+        // this.page = page
         this.searchResultContainer = page.locator('div.search-result')
         this.productDetailContainer = page.locator('div[class*="productCard_detail-wrapper"]')
         this.productName = this.productDetailContainer.locator('a[class*="productCard_title"]')
@@ -18,8 +20,9 @@ export class SearchResultsPage {
     }
 
     async selectFromSearchResult(index: number) {
-        await this.searchResultContainer.nth(index).waitFor({ state: 'visible' })
-        await this.searchResultContainer.nth(index).click()
+        const result = this.searchResultContainer.nth(index)
+        await result.waitFor({ state: 'visible' })
+        await this.clickElementAndWaitForPageToLoad(result)
     }
 
     async getProductName(index: number) {
@@ -28,6 +31,7 @@ export class SearchResultsPage {
     }
 
     async getProductPrice(index: number) {
+        await this.searchResultContainer.nth(2).waitFor({ state: 'visible', timeout: 30000 })
         await expect(this.searchProductPrice.nth(index)).toHaveText(/\d+/, { timeout: 30000 })
         const rawSearchResultPrice = await this.searchProductPrice.nth(index).innerText()
         const filteredSearchResultPrice = rawSearchResultPrice.replace(/[^0-9.]/g, '')

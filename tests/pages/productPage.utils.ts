@@ -1,7 +1,8 @@
 import { type Page, type Locator, expect } from '@playwright/test'
+import { Common } from './common.utils'
 
-export class ProductPage {
-    readonly page: Page
+export class ProductPage extends Common {
+    // readonly page: Page
     readonly pageHeading: Locator
     readonly productPageCurrentPrice: Locator
     readonly productStickyBarPrice: Locator
@@ -34,7 +35,8 @@ export class ProductPage {
 
 
     constructor(page: Page) {
-        this.page = page
+        super(page)
+        // this.page = page
         this.pageHeading = page.locator('div.product-name-div > h1')
         this.productStickyBarPrice = page.locator('span[class*="productDetailStickyBar_product-sticky-bar-price"]')
         this.productPageCurrentPrice = page.locator('span[class*="productPrice_new-price"]')
@@ -119,7 +121,8 @@ export class ProductPage {
     }
 
     async addProductTocart() {
-        await this.addToCartButton.click()
+        // await this.addToCartButton.click()
+        await this.clickElementAndWaitForPageToLoad(this.addToCartButton)
         await expect(this.addToCartModal).toBeVisible()
     }
 

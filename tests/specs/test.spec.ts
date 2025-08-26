@@ -12,13 +12,11 @@ test('Add and Remove Product from Cart', async ({ page, common, searchResultPage
     let productPagePrice: number
     let finalUpdatedPrice: number
 
-    // Go to https://www.balsamhill.com/
-    await page.goto('/')
     // Search for 'Christmas Tree' using the search bar.
     await test.step(`Search for ${productKeyword}`, async () => {
         await common.searchProduct(productKeyword)
-        await common.clickViewAllResults()
-        await page.waitForURL('**/search?text=*', { waitUntil: 'commit' })
+        await common.clickElementAndWaitForPageToLoad(common.viewAllResultsLink)
+        // await page.waitForURL('**/search?text=*', { waitUntil: 'commit' })
     })
     // Select the third result that appears on the results page.
     // Validate that the price displayed on the results page is the same on the product page
@@ -53,8 +51,9 @@ test('Add and Remove Product from Cart', async ({ page, common, searchResultPage
     // Click View Cart.
     // Validate that the Cart icon shows the number 1, indicating an item has been added.
     await test.step('View Cart and Verify Cart Count and Customized Price', async () => {
-        await productPage.modalViewCartButton.click()
-        await page.waitForURL('**/cart', { waitUntil: 'commit' })
+        // await productPage.modalViewCartButton.click()
+        await common.clickElementAndWaitForPageToLoad(productPage.modalViewCartButton)
+        // await page.waitForURL('**/cart', { waitUntil: 'commit' })
         const cartItemCount = await cartPage.getCartItemCount()
         const cartBadgeCount = await common.getCartBadgeCount()
         const totalAmount = await cartPage.getTotalAmount()

@@ -1,4 +1,4 @@
-import { type Page, type Locator } from '@playwright/test'
+import { type Page, type Locator, expect } from '@playwright/test'
 
 export class Common {
     readonly page: Page
@@ -17,7 +17,7 @@ export class Common {
         this.searchField = page.getByRole('searchbox', { name: 'Search' })
         this.searchResults = page.locator('div[data-cnstrc-item-section="Products"]')
         this.viewAllResultsLink = page.getByRole('link', { name: 'View all results' })
-        
+
     }
 
     async searchProduct(keyword: string) {
@@ -36,6 +36,15 @@ export class Common {
     async getCartBadgeCount() {
         const cartBadgeCount = await this.cartBadge.innerText()
         return Number(cartBadgeCount)
+    }
+
+    async clickElementAndWaitForPageToLoad(locator: Locator) {
+        await locator.click()
+        const spinner = this.page.getByRole('img', { name: 'Loading' }).nth(1)
+        try {
+            await spinner.waitFor({ state: 'visible', timeout: 5000 }).catch(() => { })
+            await spinner.waitFor({ state: 'hidden', timeout: 60000 })
+        } catch { }
     }
 
 }
